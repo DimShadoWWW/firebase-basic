@@ -169,7 +169,6 @@
     firebase.initializeApp(config);
   </script></code></pre>
                 <p>El fragmento contiene información de inicialización para configurar el Firebase JavaScript SDK para que use <a href="https://firebase.google.com/docs/auth/">Authentication</a>, <a href="https://firebase.google.com/docs/storage/">Storage</a>                    y el <a href="https://firebase.google.com/docs/database/">Realtime Database</a>.</p>
-
             </section>
 
             <section>
@@ -192,6 +191,25 @@ ref.set("Hello, Developers!");
                     <pre><code data-trim>
 ref.on("value", function (snapshot) {
   var data = snapshot.val();
+  console.log(data);
+});
+</code></pre>
+            </section>
+
+            <section>
+                <p>
+                  Además, se puede acceder directamente a la información definida como pública:
+                </p>
+
+                <pre><code data-trim>
+$.ajax({
+  dataType: 'json',
+  url: 'https://hai.firebaseio-demo.com/.json',
+  data: data,
+  success: success
+});
+...
+$.getJSON('https://hai.firebaseio-demo.com/key1/key2.json', function (data) {
   console.log(data);
 });
 </code></pre>
