@@ -1,0 +1,382 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=no">
+    <meta name="description" content="Introduccion a Firebase">
+    <meta name="author" content="Anielkis Herrera">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <title>Firebase</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- <link rel="stylesheet" href="css/custom.css"> -->
+
+    <!-- <link rel="stylesheet" href="css/theme/black.css"> -->
+    <!-- <link rel="stylesheet" href="css/theme/beige.css"> -->
+    <link rel="stylesheet" href="css/theme/league.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <style type="text/css">
+        .reveal pre code {
+            font-size: 12px;
+        }
+
+        .flexbox {
+            background-color: transparent !important;
+            display: -ms-flex;
+            display: -webkit-flex;
+            display: flex;
+            width: 100%;
+            font: 12px;
+        }
+
+        .left {
+            background: #303030;
+            margin-right: 1px;
+            /*background: #a0ffa0;*/
+            min-width: 49%;
+            flex-grow: 0;
+        }
+
+        .right {
+            background: #303030;
+            margin-left: 1px;
+            /*background: #a0a0ff;*/
+            min-width: 49%;
+            flex-grow: 1;
+        }
+    </style>
+
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <img src="img/firebase-logo.png" style="border:none; box-shadow: none; background: none;">
+            </section>
+
+            <section>
+                <h1>Características generales</h1>
+            </section>
+
+            <section>
+                <ul>
+                    <li><b>En tiempo real:</b> todos los usuarios reciben las actualizaciones al realizarse cambios</li>
+                    <li class="fragment"><b>Autenticación:</b> comparte la autenticación con api para móviles (android e IOS), manteniendo los usuarios en ellos</li>
+                    <li class="fragment"><b>Hosting:</b> permite hostear sitios estáticos internamente</li>
+                    <li class="fragment"><b>Mensajería:</b> permite enviar mensajes a usuarios, llegando por medio de mensajes push (sólo móviles) a los dispositivos</li>
+                    <li class="fragment"><b>Almacenamiento:</b> almacenamiento de medias, disponibles para todos los usuarios</li>
+                </ul>
+            </section>
+
+
+            <section>
+                firebase se puede considerar un gran archivo json donde se puede consultar información dando una ruta de llaves como si fueran directorios en un servidor web, adicionando ".json" al final del último) y devuelve el valor de la última llave solicitada..
+            </section>
+
+            <section>
+                por ejemplo:
+
+                <div class="flexbox">
+                    <div class="left">
+                        <pre class="json"><code>{
+  "key1": {
+    "key2": {
+      3
+    }
+  }
+}</code></pre>
+                    </div>
+                    <div class="right">
+                        <pre class="bash"><code>$ curl https://example.firebase-io.com/key1/key2.json
+3</code></pre>
+                    </div>
+                </div>
+            </section>
+            <section>
+                ejemplo 2:
+                <div class="flexbox">
+                    <div class="left">
+                        <pre class="json"><code>{
+  "key1": {
+    "key2": {
+      "key3": {
+        "a": 1,
+        "b": 2,
+      }
+    }
+  }
+}</code></pre>
+                    </div>
+                    <div class="right">
+                        <pre class="bash"><code>$ curl https://example.firebase-io.com/key1/key2.json
+{
+  "key3": {
+    "a": 1,
+    "b": 2,
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h1>Desarrollo web con firebase</h1>
+            </section>
+
+            <section>
+                Setup para web:
+                <ol>
+                    <li>Crea un proyecto de Firebase en la consola <a href="https://firebase.google.com/console/">Firebase console</a>, si aún no está creado.
+                        <ul>
+                            <li>Si ya se tiene un proyecto de Google asociado a la app, se hace clic en <strong>Import Google Project</strong>. De lo contrario, en <strong>Create New Project</strong>.</li>
+                            <li>Si ya se tiene un proyecto, haz clic en <strong>Add App</strong> en la página de información general del proyecto.</li>
+                        </ul>
+                    </li>
+                    <li>Hacer clic en <strong>Add Firebase to your web app</strong>.</li>
+                    <li>Hacer clic en <strong>Copy</strong>, luego se pega el fragmento de código en el código de la app.</li>
+                </ol>
+            </section>
+            <section>
+                Setup para web:
+                <p>Si se necesita volver a obtener el código de configuración, simplemente se usa <strong>Add App</strong> en la página de información general y se selecciona la opción Web nuevamente.</p>
+                <pre class="json"><code>// TODO: personalizar según lo que se muestre en la página
+  <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: '<your-api-key>',
+      authDomain: '<your-auth-domain>',
+      databaseURL: '<your-database-url>',
+      storageBucket: '<your-storage-bucket>'
+    };
+    firebase.initializeApp(config);
+  </script></code></pre>
+                <p>El fragmento contiene información de inicialización para configurar el Firebase JavaScript SDK para que use <a href="https://firebase.google.com/docs/auth/">Authentication</a>, <a href="https://firebase.google.com/docs/storage/">Storage</a>                    y el <a href="https://firebase.google.com/docs/database/">Realtime Database</a>.</p>
+
+            </section>
+
+            <section>
+                <h2>Ejemplo de código en JavaScript</h2>
+                <br/>
+
+                <div>
+                    <h4>Inicialización</h4>
+                    <pre style="margin-bottom:-50px;"><code data-trim>
+var ref = new Firebase("https://hai.firebaseio-demo.com/");
+</code></pre>
+                </div>
+                <br/><br/>
+                    <h4>Escribir datos</h4>
+                    <pre style="margin-bottom:-50px;"><code data-trim>
+ref.set("Hello, Developers!");
+</code></pre>
+                <br/><br/>
+                    <h4>Leer datos</h4>
+                    <pre><code data-trim>
+ref.on("value", function (snapshot) {
+  var data = snapshot.val();
+  console.log(data);
+});
+</code></pre>
+            </section>
+
+            <section>
+                <h1>Autenticación de usuarios</h1>
+            </section>
+
+            <section>
+              Firebase cuenta con varios tipos de autenticación:
+              <ul>
+                <li>Autenticación por usuario y contraseña</li>
+                <li>Usuarios de Google</li>
+                <li>Usuarios de Facebook</li>
+                <li>Usuarios de Twitter</li>
+                <li>Usuarios de Github</li>
+                <li>Uso de un sistema personalizado de autenticación</li>
+                <li>Autenticación anónima</li>
+              </ul>
+              <p>
+                Una vez que se identifica al usuario, se guarda el UID como referencia, el cuál se puede utilizar luego para identificar el usuario en otros módulos, como el control de acceso.
+              </p>
+
+            </section>
+            <section>
+              <p>
+                La "autenticación" anónima no autentica, sino que sólo identifica a cada cliente por medio de un email, sin validación.
+              </p>
+
+              <p>
+                Por lo que si se genera un email mediante código (ficticio, pero único entre los dispositivos) y se almacena en una cookie para que no se necesite generar nuevamente,
+                se puede identificar a los usuarios sin necesidad de solicitarles información.
+              </p>
+            </section>
+
+            <section>
+                <h1>Control de acceso</h1>
+            </section>
+
+            <section>
+              <p>
+                La seguridad en firebase es muy simple.. se da acceso de lectura o escritura y se verifican los accesos utilizando código javascript
+              </p>
+
+              <h4>Regla de acceso:</h4>
+              <pre><code data-trim>{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+  }
+}</code></pre>
+            </section>
+
+            <section>
+              <h4>Regla de acceso:</h4>
+              <pre><code data-trim data-noescape>{
+  "rules": {
+    "i18n": {
+      ".read": true,
+      ".write": false
+  	},
+  	"events": {
+      ".read": "auth.provider == 'google' && ( auth.token.email.matches(/.*@ejemplo.com$/) || auth.token.email == 'ejemplo@gmail.com' )",
+        "$event": {
+            "$user": {
+                ".read": "auth.uid === $user || (auth.provider == 'google' && ( auth.token.email.matches(/.*@ejemplo.com$/) || auth.token.email == 'ejemplo@gmail.com' ))",
+                ".write": "auth.uid === $user"
+            }
+        }
+  	},
+  	"config": {
+      ".read": true,
+      ".write": false
+    }
+  }
+}</code></pre>
+            </section>
+
+            <section>
+              <p>
+                "i18n" y "config" sólo se podrán acceder de lectura, pero nadie puede escribir (sólo se podría desde la consola de administración de firebase)
+              </p>
+              <pre><code data-trim data-noescape>"i18n": {
+  ".read": true,
+  ".write": false
+}
+.......
+"config": {
+  ".read": true,
+  ".write": false
+}
+</code></pre>
+            </section>
+
+            <section>
+              <small>
+                <p>
+                  ruta: "/events/$event/$user" .. donde "$event" y "$user" son variables en la ruta
+                </p>
+              </small>
+            <pre><code data-trim data-noescape>"events": {
+".read": "auth.provider == 'google' && ( auth.token.email.matches(/.*@ejemplo.com$/) || auth.token.email == 'ejemplo@gmail.com' )",
+  "$event": {
+      "$user": {
+          ".read": "auth.uid === $user || (auth.provider == 'google' && ( auth.token.email.matches(/.*@ejemplo.com$/) || auth.token.email == 'ejemplo@gmail.com' ))",
+          ".write": "auth.uid === $user"
+      }
+  }
+}</code></pre>
+              <small>
+                <ul>
+                  <li>"events" sólo se podrá leer si está autenticado por el proveeder "google" y además el email del usuario en google está en el dominio "ejemplo.com" o es "ejemplo@gmail.com"</li>
+                  <li>"events/$event/$user":
+                    <ul>
+                      <li>se podrá leer si el uid del usuario en firebase coincide con "$user" o si está autenticado por el proveeder "google" y además el email del usuario en google está en el dominio "ejemplo.com" o es "ejemplo@gmail.com"</li>
+                      <li>se podrá escribir si el uid del usuario en firebase coincide con "$user"</li>
+                    </ul>
+                  </li>
+                </ul>
+
+              </small>
+            </section>
+
+            <section>
+            </section>
+
+            <section>
+                <pre class="json"><code>
+</code></pre>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            history: true,
+
+            controls: true,
+            progress: true,
+            center: true,
+
+            theme: "night", // available themes are in /css/theme
+            transition: Reveal.getQueryHash().transition || 'concave', // default/cube/page/concave/zoom/linear/fade/none
+
+            // More info https://github.com/hakimel/reveal.js#dependencies
+            dependencies: [{
+                    src: 'lib/js/classList.js',
+                    condition: function() {
+                        return !document.body.classList;
+                    }
+                }, {
+                    src: 'plugin/markdown/marked.js',
+                    condition: function() {
+                        return !!document.querySelector('[data-markdown]');
+                    }
+                },
+                {
+                    src: 'plugin/markdown/markdown.js',
+                    condition: function() {
+                        return !!document.querySelector('[data-markdown]');
+                    }
+                },
+                {
+                    src: 'plugin/highlight/highlight.js',
+                    async: true,
+                    callback: function() {
+                        hljs.initHighlightingOnLoad();
+                    }
+                },
+                {
+                    src: 'plugin/zoom-js/zoom.js',
+                    async: true,
+                    condition: function() {
+                        return !!document.body.classList;
+                    }
+                }
+            ]
+        });
+    </script>
+</body>
+
+</html>
